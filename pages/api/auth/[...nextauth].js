@@ -3,7 +3,6 @@ import GoogleProvider from 'next-auth/providers/google';
 
 export const authOptions = {
   // configure authentication providers
-  secret: process.env.SECRET,
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_ID,
@@ -14,6 +13,7 @@ export const authOptions = {
     // default strategy
     strategy: 'jwt',
   },
+  secret: process.env.NEXT_PUBLIC_SECRET,
 };
 
 export default NextAuth(authOptions);
