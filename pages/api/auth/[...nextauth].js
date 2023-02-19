@@ -15,4 +15,7 @@ export const authOptions = {
   },
 };
 
+console.log(process.env.GOOGLE_ID);
+console.log(process.env.GOOGLE_SECRET);
+
 export default NextAuth(authOptions);
