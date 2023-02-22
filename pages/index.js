@@ -6,8 +6,13 @@ export default function IndexPage() {
   if (status === 'authenticated') {
     return (
       <div>
+        {data.user.image}
         <h1> hi {data.user.name}</h1>
-        <img src={data.user.image} alt={data.user.name + ' photo'} />
+        <img
+          src={data.user.image}
+          referrerpolicy='no-referrer'
+          alt={data.user.name + ' photo'}
+        />
         <button onClick={signOut}>sign out</button>
       </div>
     );
