@@ -4,7 +4,7 @@ import TopMenu from './TopMenu';
 
 export const siteTitle = 'Timelines';
 
-export default function Layout({ children, home }) {
+export default function Layout({ children }) {
   return (
     <div className={styles.container}>
       <Head>
