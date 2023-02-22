@@ -1,25 +1,12 @@
-import { useSession, signIn, signOut } from 'next-auth/react';
-
-export default function IndexPage() {
-  const { data, status } = useSession();
-  if (status === 'loading') return <h1> loading... please wait </h1>;
-  if (status === 'authenticated') {
-    return (
-      <div>
-        {data.user.image}
-        <h1> hi {data.user.name}</h1>
-        <img
-          src={data.user.image}
-          referrerpolicy='no-referrer'
-          alt={data.user.name + ' photo'}
-        />
-        <button onClick={signOut}>sign out</button>
-      </div>
-    );
-  }
+export default function Index() {
   return (
     <div>
-      <button onClick={() => signIn('google')}>sign in with google</button>
+      WIP - Timelines Component
+      <br />
+      User must sign in to access the My Timelines and Editor view, but can
+      otherwise access this Timelines view only. Here, the user is presented
+      with a list of published Timelines, and can choose which Timeline to load
+      into the Viewer.
     </div>
   );
 }
