@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import styles from './Layout.module.scss';
+import styles from './Layout.module.css';
 import TopMenu from './TopMenu';
 
 export const siteTitle = 'Timelines';
