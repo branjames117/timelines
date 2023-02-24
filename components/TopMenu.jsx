@@ -20,7 +20,15 @@ export default function TopMenu() {
           </>
         ) : (
           <li>
-            <button onClick={() => signIn('google')}>Sign In</button>
+            <button
+              onClick={() =>
+                signIn('google', {
+                  callbackUrl: `${window.location.origin}/myTimelines`,
+                })
+              }
+            >
+              Sign In
+            </button>
           </li>
         )}
       </ul>

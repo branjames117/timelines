@@ -1,5 +1,5 @@
 import connection from '../../../lib/connection';
-import Timeline from '../../../models/timelineModel';
+import Timeline from '../../../models/Timeline';
 
 /**
  * @param {import('next').NextApiRequest} req

@@ -1,7 +1,7 @@
-export default function Index() {
+export default function IndexPage() {
   return (
     <div>
-      WIP - Timelines Component
+      WIP - Timelines Page
       <br />
       User must sign in to access the My Timelines and Editor view, but can
       otherwise access this Timelines view only. Here, the user is presented
