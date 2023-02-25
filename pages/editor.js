@@ -1,16 +1,22 @@
+import Head from 'next/head';
 import { authOptions } from './api/auth/[...nextauth]';
 import { getServerSession } from 'next-auth/next';
 import { dbConnect } from '../lib/dbConnect';
-import User from '../models/User';
+import { User } from '../models';
 
 export default function EditorPage(props) {
   return (
-    <div>
-      WIP - Editor Page
-      <br />
-      User must sign in to access the Editor view. Here, the user has a list of
-      their own projects and a button to start a new project.
-    </div>
+    <>
+      <Head>
+        <title>Timelines / Editor</title>
+      </Head>
+      <div>
+        WIP - Editor Page
+        <br />
+        User must sign in to access the Editor view. Here, the user has a list
+        of their own projects and a button to start a new project.
+      </div>
+    </>
   );
 }
 

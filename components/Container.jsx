@@ -1,12 +1,12 @@
 import Head from 'next/head';
-import styles from './Layout.module.css';
+import styles from './Container.module.css';
 import TopMenu from './TopMenu';
 
 export const siteTitle = 'Timelines';
 
-export default function Layout({ children }) {
+export default function Container({ children }) {
   return (
-    <div className={styles.container}>
+    <>
       <Head>
         <link rel='icon' href='/favicon.ico' />
         <meta name='description' content='User-generated timeline app' />
@@ -21,7 +21,7 @@ export default function Layout({ children }) {
         <title>{siteTitle}</title>
       </Head>
       <TopMenu />
-      <main>{children}</main>
-    </div>
+      <main className={styles.main}>{children}</main>
+    </>
   );
 }

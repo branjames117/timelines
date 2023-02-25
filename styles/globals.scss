@@ -1,27 +1,47 @@
-html,
-body {
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import 'react-tooltip/dist/react-tooltip.css';
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  line-height: 1.6;
-  font-size: 18px;
 }
 
-* {
-  box-sizing: border-box;
+html,
+body {
+  background-color: black;
+  color: white;
+  font-family: 'Roboto', Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  line-height: 1.6;
+  margin: 0 auto;
+  overflow-x: hidden; /* disable horizontal scroll */
 }
 
 a {
-  color: #0070f3;
+  color: #6db0fc;
+  cursor: pointer;
   text-decoration: none;
 }
 
-a:hover {
-  text-decoration: underline;
+button {
+  background-color: black;
+  border: 1px solid #6db0fc;
+  border-radius: 0.4rem;
+  color: #6db0fc;
+  cursor: pointer;
+  display: inline-block;
+  padding: 4px 8px;
+  text-decoration: none;
 }
 
 img {
   max-width: 100%;
   display: block;
+}
+
+ul {
+  list-style-type: none;
 }

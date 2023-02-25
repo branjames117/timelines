@@ -1,5 +1,5 @@
 import { dbConnect } from '../../../lib/dbConnect';
-import Timeline from '../../../models/Timeline';
+import { Timeline } from '../../../models';
 
 /**
  * @param {import('next').NextApiRequest} req
