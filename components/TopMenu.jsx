@@ -19,12 +19,12 @@ export default function TopMenu() {
       <nav>
         <ul>
           <li>
-            <Link href='/'>Timelines</Link>
+            <Link href={'/'}>Timelines</Link>
           </li>
           {authenticated ? (
             <li>
               <span>
-                <Link href='/editor'>Editor</Link>
+                <Link href={'/editor'}>Editor</Link>
               </span>
               <Link
                 href='/profile'
