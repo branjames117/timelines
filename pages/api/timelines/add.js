@@ -1,4 +1,4 @@
-import connection from '../../../lib/connection';
+import { dbConnect } from '../../../lib/dbConnect';
 import Timeline from '../../../models/Timeline';
 
 /**
@@ -7,7 +7,7 @@ import Timeline from '../../../models/Timeline';
  */
 export default async (req, res) => {
   try {
-    await connection();
+    await dbConnect();
 
     const timeline = await Timeline.create(req.body);
 

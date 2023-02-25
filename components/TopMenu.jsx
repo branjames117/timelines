@@ -23,7 +23,7 @@ export default function TopMenu() {
             <button
               onClick={() =>
                 signIn('google', {
-                  callbackUrl: `${window.location.origin}/myTimelines`,
+                  callbackUrl: `${window.location.origin}/editor`,
                 })
               }
             >

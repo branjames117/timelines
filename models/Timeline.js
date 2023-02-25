@@ -1,4 +1,4 @@
-import { Schema, model, models } from 'mongoose';
+import { Schema, models, model } from 'mongoose';
 
 const timelineSchema = new Schema({
   name: String,
@@ -9,7 +9,4 @@ const timelineSchema = new Schema({
   },
 });
 
-// create model if it does not exist
-const Timeline = models.Timeline || model('Timeline', timelineSchema);
-
-export default Timeline;
+export default models.Timeline || model('Timeline', timelineSchema);
