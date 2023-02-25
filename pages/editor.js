@@ -1,7 +1,7 @@
 import { authOptions } from './api/auth/[...nextauth]';
 import { getServerSession } from 'next-auth/next';
 import { dbConnect } from '../lib/dbConnect';
-import { models } from 'mongoose';
+import User from '../models/User';
 
 export default function EditorPage(props) {
   return (
@@ -20,10 +20,10 @@ export async function getServerSideProps(context) {
   if (!session) return { redirect: { destination: '/' } };
 
   await dbConnect();
-  const user = await models.User.findOne({ email: session.user.email });
+  const user = await User.findOne({ email: session.user.email });
   if (!user) {
     // first-time login, create a new user associated with the email address
-    await models.User.create({ email: session.user.email });
+    await User.create({ email: session.user.email });
   }
 
   return {
