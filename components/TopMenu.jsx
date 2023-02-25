@@ -19,14 +19,14 @@ export default function TopMenu() {
       <nav>
         <ul>
           <li>
-            <a href='/'>Timelines</a>
+            <Link href='/'>Timelines</Link>
           </li>
           {authenticated ? (
             <li>
               <span>
-                <a href='/editor'>Editor</a>
+                <Link href='/editor'>Editor</Link>
               </span>
-              <a
+              <Link
                 href='/profile'
                 data-tooltip-id='profile'
                 data-tooltip-content='Profile'
@@ -39,7 +39,7 @@ export default function TopMenu() {
                   width={50}
                   referrerPolicy='no-referrer'
                 />
-              </a>
+              </Link>
               <Tooltip noArrow id='profile' />
             </li>
           ) : (
