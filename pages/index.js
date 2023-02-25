@@ -3,16 +3,6 @@ import Link from 'next/link';
 export default function IndexPage() {
   return (
     <div>
-      <Link href='/editor'>Editor</Link>
-      <Link href='/editor'>Editor</Link>
-      <Link href={'/editor'}>Editor</Link>
-      <Link href={'/editor'}>Editor</Link>
-      <Link href={{ pathName: '/editor' }}>
-        <a>Editor</a>
-      </Link>
-      <Link href='/editor'>
-        <span>Editor</span>
-      </Link>
       WIP - Timelines Page
       <br />
       User must sign in to access the My Timelines and Editor view, but can
