@@ -1,6 +1,9 @@
+import Link from 'next/link';
+
 export default function IndexPage() {
   return (
     <div>
+      <Link href='/editor'>Editor</Link>
       WIP - Timelines Page
       <br />
       User must sign in to access the My Timelines and Editor view, but can
