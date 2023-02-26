@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import { models } from 'mongoose';
 import { authOptions } from './api/auth/[...nextauth]';
 import { getServerSession } from 'next-auth/next';
 import { dbConnect } from '../lib/dbConnect';
@@ -25,11 +26,21 @@ export async function getServerSideProps(context) {
 
   if (!session) return { redirect: { destination: '/' } };
 
-  await dbConnect();
-  const user = await User.findOne({ email: session.user.email });
-  if (!user) {
-    // first-time login, create a new user associated with the email address
-    await User.create({ email: session.user.email });
+  let user = {};
+  try {
+    await dbConnect();
+    console.log('connected to db');
+    if (models.User) {
+      console.log('found model');
+      user = await models.User.findOne({ email: session.user.email });
+      console.log(user);
+      if (!user) {
+        // first-time login, create a new user associated with the email address
+        await User.create({ email: session.user.email });
+      }
+    }
+  } catch (err) {
+    console.log(err);
   }
 
   return {

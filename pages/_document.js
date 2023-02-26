@@ -8,7 +8,6 @@ export default function Document() {
         <meta name='description' content='User-generated timeline app' />
         <meta name='og:title' content='Timelines' />
         <meta name='twitter:card' content='summary_large_image' />
-        <title>Timelines</title>
       </Head>
       <body>
         <Main />
