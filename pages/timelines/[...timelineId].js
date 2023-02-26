@@ -4,11 +4,7 @@ import { Types } from 'mongoose';
 import { dbConnect } from '../../lib/dbConnect';
 import { Timeline } from '../../models';
 
-export default function TimelinePage(props) {
-  let timeline;
-  if (props.timeline) {
-    timeline = JSON.parse(props.timeline);
-  }
+export default function TimelinePage({ timeline }) {
   return timeline ? (
     <>
       <Head>
@@ -45,7 +41,6 @@ export async function getServerSideProps(context) {
     if (Types.ObjectId.isValid(id)) {
       await dbConnect();
       timeline = await Timeline.findById(id);
-      timeline = JSON.stringify(timeline);
     }
   } catch (err) {
     console.log(err);
@@ -53,7 +48,7 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
-      timeline,
+      timeline: JSON.parse(JSON.stringify(timeline)),
     },
   };
 }
