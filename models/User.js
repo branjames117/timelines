@@ -10,12 +10,8 @@ const userSchema = new Schema({
 let User;
 try {
   User = models.User;
-  console.log(User);
 } catch (err) {
-  console.log(err);
   User = model('User', userSchema);
-  console.log(User);
 }
-console.log(User);
 
 export default User;

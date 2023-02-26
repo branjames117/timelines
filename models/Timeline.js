@@ -16,11 +16,8 @@ const timelineSchema = new Schema({
 let Timeline;
 try {
   Timeline = models.Timeline;
-  console.log(Timeline);
 } catch (err) {
-  console.log(err);
   Timeline = model('Timeline', timelineSchema);
-  console.log(Timeline);
 }
 
 export default Timeline;

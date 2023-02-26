@@ -29,15 +29,10 @@ export async function getServerSideProps(context) {
   let user = {};
   try {
     await dbConnect();
-    console.log('connected to db');
-    if (models.User) {
-      console.log('found model');
-      user = await models.User.findOne({ email: session.user.email });
-      console.log(user);
-      if (!user) {
-        // first-time login, create a new user associated with the email address
-        await User.create({ email: session.user.email });
-      }
+    user = await models.User.findOne({ email: session.user.email });
+    if (!user) {
+      // first-time login, create a new user associated with the email address
+      await User.create({ email: session.user.email });
     }
   } catch (err) {
     console.log(err);

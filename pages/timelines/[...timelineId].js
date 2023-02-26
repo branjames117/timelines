@@ -22,13 +22,8 @@ export default function TimelinePage() {
 export async function getServerSideProps(context) {
   let timeline = {};
   try {
-    console.log('connected to db');
     await dbConnect();
-    if (models.Timeline) {
-      console.log('found model');
-      timeline = await Timeline.findById(context.query.timelineId[0]);
-      console.log(timeline);
-    }
+    timeline = await Timeline.findById(context.query.timelineId[0]);
   } catch (err) {
     console.log(err);
   }
