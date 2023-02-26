@@ -1,4 +1,4 @@
-import Head from 'next/head';
+import { Head } from 'next/document';
 import { SessionProvider } from 'next-auth/react';
 import Container from '../components/Container';
 import '../styles/globals.scss';
