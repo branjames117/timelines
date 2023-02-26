@@ -36,7 +36,7 @@ export default function TimelinePage({ timeline }) {
 
 export async function getServerSideProps(context) {
   let id = context.query.timelineId[0];
-  let timeline;
+  let timeline = {};
   try {
     if (Types.ObjectId.isValid(id)) {
       await dbConnect();
