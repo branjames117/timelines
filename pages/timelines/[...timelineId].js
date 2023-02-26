@@ -5,7 +5,10 @@ import { dbConnect } from '../../lib/dbConnect';
 import { Timeline } from '../../models';
 
 export default function TimelinePage(props) {
-  const timeline = JSON.parse(props.timeline);
+  let timeline;
+  if (props.timeline) {
+    timeline = JSON.parse(props.timeline);
+  }
   return timeline ? (
     <>
       <Head>
