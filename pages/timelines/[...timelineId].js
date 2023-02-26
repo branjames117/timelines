@@ -5,14 +5,13 @@ import { Timeline } from '../../models';
 
 export default function TimelinePage(props) {
   const timeline = JSON.parse(props.timeline);
-  console.log(timeline);
-  return (
+  return timeline ? (
     <>
       <Head>
         <title>Timelines / Timeline</title>
       </Head>
       <div>
-        WIP - Timeline Page
+        WIP - Timeline Page for {timeline.name} of {timeline.universe}
         <Image
           src={`${timeline.map.url}`}
           alt='Map'
@@ -25,22 +24,29 @@ export default function TimelinePage(props) {
         of their own projects and a button to start a new project.
       </div>
     </>
+  ) : (
+    <>
+      <Head>
+        <title>Timeline Lost</title>
+      </Head>
+      <h1>Timeline not found. You lost, Doc?</h1>
+    </>
   );
 }
 
 export async function getServerSideProps(context) {
-  let timeline = {};
+  let timeline;
   try {
     await dbConnect();
     timeline = await Timeline.findById(context.query.timelineId[0]);
+    timeline = JSON.stringify(timeline);
   } catch (err) {
     console.log(err);
   }
-  console.log(timeline);
 
   return {
     props: {
-      timeline: JSON.stringify(timeline),
+      timeline,
     },
   };
 }
