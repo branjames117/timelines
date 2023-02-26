@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import Image from 'next/image';
+import { Types } from 'mongoose';
 import { dbConnect } from '../../lib/dbConnect';
 import { Timeline } from '../../models';
 
@@ -35,11 +36,14 @@ export default function TimelinePage(props) {
 }
 
 export async function getServerSideProps(context) {
+  let id = context.query.timelineId[0];
   let timeline;
   try {
-    await dbConnect();
-    timeline = await Timeline.findById(context.query.timelineId[0]);
-    timeline = JSON.stringify(timeline);
+    if (Types.ObjectId.isValid(id)) {
+      await dbConnect();
+      timeline = await Timeline.findById(id);
+      timeline = JSON.stringify(timeline);
+    }
   } catch (err) {
     console.log(err);
   }
