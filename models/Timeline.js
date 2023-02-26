@@ -13,11 +13,4 @@ const timelineSchema = new Schema({
   },
 });
 
-let Timeline;
-try {
-  Timeline = models.Timeline;
-} catch (err) {
-  Timeline = model('Timeline', timelineSchema);
-}
-
-export default Timeline;
+export default models.Timeline || model('Timeline', timelineSchema);

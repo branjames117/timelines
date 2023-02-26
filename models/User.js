@@ -7,11 +7,4 @@ const userSchema = new Schema({
   lastLogin: Date,
 });
 
-let User;
-try {
-  User = models.User;
-} catch (err) {
-  User = model('User', userSchema);
-}
-
-export default User;
+export default models.User || model('User', userSchema);
