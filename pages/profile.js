@@ -96,12 +96,13 @@ export async function getServerSideProps(context) {
 
   let fetchedUser = {};
   try {
+    console.log('connecting to db');
     await dbConnect();
     fetchedUser = await User.findOne({ email: user.email });
+    console.log(fetchedUser);
     if (fetchedUser) {
       fetchedUser = JSON.parse(JSON.stringify(fetchedUser));
-    }
-    if (!user) {
+    } else {
       // first-time login, create a new user associated with the email address
       const newUser = await User.create({
         email: user.email,
@@ -113,6 +114,11 @@ export async function getServerSideProps(context) {
   } catch (err) {
     console.log(err);
   }
+  fetchedUser = {
+    username: 'hi',
+    description: 'hi',
+    showProfilePicture: true,
+  };
 
   return {
     props: {
