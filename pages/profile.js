@@ -1,11 +1,43 @@
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { signOut } from 'next-auth/react';
 import { authOptions } from './api/auth/[...nextauth]';
 import { getServerSession } from 'next-auth/next';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import { dbConnect } from '../lib/dbConnect';
 import { User } from '../models';
+import { useState } from 'react';
 
-export default function ProfilePage(props) {
+export default function ProfilePage({ user }) {
+  const [updated, setUpdated] = useState(false);
+  const router = useRouter();
+
+  // formik logic
+  const formik = useFormik({
+    initialValues: {
+      username: user.username || '',
+      description: user.description || '',
+      showProfilePicture: user.showProfilePicture || false,
+    },
+
+    validationSchema: Yup.object({
+      username: Yup.string()
+        .max(20, 'Username must be no longer than 20 characters.')
+        .required('Username is required.'),
+      description: Yup.string().max(
+        255,
+        'Description must be no longer than 255 characters.'
+      ),
+    }),
+
+    onSubmit: (values) => {
+      console.log(values);
+      setUpdated(true);
+      // update user's document via update to /user/update
+    },
+  });
+
   function signoutHandler() {
     signOut({ callbackUrl: '/' });
   }
@@ -15,111 +47,65 @@ export default function ProfilePage(props) {
       <Head>
         <title>Timelines / My Profile</title>
       </Head>
-      <div>
-        WIP - Profile Page
-        <br />
-        User must sign in to access the Profile view. Here, the user can enter
-        or update their (unique) username and some biographical information
-        about themselves, including their birthdate if they so choose.
-        <br />
-        <button onClick={signoutHandler}>Sign Out</button>
-      </div>
-      <div>
-        WIP - Profile Page
-        <br />
-        User must sign in to access the Profile view. Here, the user can enter
-        or update their (unique) username and some biographical information
-        about themselves, including their birthdate if they so choose.
-        <br />
-        <button onClick={signoutHandler}>Sign Out</button>
-      </div>
-      <div>
-        WIP - Profile Page
-        <br />
-        User must sign in to access the Profile view. Here, the user can enter
-        or update their (unique) username and some biographical information
-        about themselves, including their birthdate if they so choose.
-        <br />
-        <button onClick={signoutHandler}>Sign Out</button>
-      </div>
-      <div>
-        WIP - Profile Page
-        <br />
-        User must sign in to access the Profile view. Here, the user can enter
-        or update their (unique) username and some biographical information
-        about themselves, including their birthdate if they so choose.
-        <br />
-        <button onClick={signoutHandler}>Sign Out</button>
-      </div>
-      <div>
-        WIP - Profile Page
-        <br />
-        User must sign in to access the Profile view. Here, the user can enter
-        or update their (unique) username and some biographical information
-        about themselves, including their birthdate if they so choose.
-        <br />
-        <button onClick={signoutHandler}>Sign Out</button>
-      </div>
-      <div>
-        WIP - Profile Page
-        <br />
-        User must sign in to access the Profile view. Here, the user can enter
-        or update their (unique) username and some biographical information
-        about themselves, including their birthdate if they so choose.
-        <br />
-        <button onClick={signoutHandler}>Sign Out</button>
-      </div>
-      <div>
-        WIP - Profile Page
-        <br />
-        User must sign in to access the Profile view. Here, the user can enter
-        or update their (unique) username and some biographical information
-        about themselves, including their birthdate if they so choose.
-        <br />
-        <button onClick={signoutHandler}>Sign Out</button>
-      </div>
-      <div>
-        WIP - Profile Page
-        <br />
-        User must sign in to access the Profile view. Here, the user can enter
-        or update their (unique) username and some biographical information
-        about themselves, including their birthdate if they so choose.
-        <br />
-        <button onClick={signoutHandler}>Sign Out</button>
-      </div>
-      <div>
-        WIP - Profile Page
-        <br />
-        User must sign in to access the Profile view. Here, the user can enter
-        or update their (unique) username and some biographical information
-        about themselves, including their birthdate if they so choose.
-        <br />
-        <button onClick={signoutHandler}>Sign Out</button>
-      </div>
-      <div>
-        WIP - Profile Page
-        <br />
-        User must sign in to access the Profile view. Here, the user can enter
-        or update their (unique) username and some biographical information
-        about themselves, including their birthdate if they so choose.
-        <br />
-        <button onClick={signoutHandler}>Sign Out</button>
-      </div>
+      {updated && <div>Profile updated successfully.</div>}
+      <form onSubmit={formik.handleSubmit}>
+        <div>
+          <label htmlFor='username'>Name</label>
+          <input
+            placeholder='Enter a unique public username'
+            type='text'
+            name='username'
+            value={formik.values.username}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+          />
+          <span>{formik.touched.username && formik.errors.username}</span>
+        </div>{' '}
+        <div>
+          <label htmlFor='description'>Description</label>
+          <textarea
+            placeholder='Tell us about yourself'
+            type='text'
+            name='description'
+            value={formik.values.description}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+          />
+          <span>{formik.touched.description && formik.errors.description}</span>
+        </div>{' '}
+        <div>
+          <label htmlFor='showProfilePicture'>Show Profile Picture?</label>
+          <input
+            type='checkbox'
+            name='showProfilePicture'
+            checked={formik.values.showProfilePicture}
+            onChange={formik.handleChange}
+          />
+        </div>
+        <div>
+          <button type='submit'>Save Changes</button>
+        </div>
+      </form>
+      <button onClick={() => signoutHandler()}>Sign Out</button>
     </>
   );
 }
 
 export async function getServerSideProps(context) {
-  const session = await getServerSession(context.req, context.res, authOptions);
+  let { user } = await getServerSession(context.req, context.res, authOptions);
 
-  if (!session) return { redirect: { destination: '/' } };
+  if (!user) return { redirect: { destination: '/' } };
 
+  let fetchedUser = {};
   try {
     await dbConnect();
-    const user = await User.findOne({ email: session.user.email });
+    fetchedUser = await User.findOne({ email: user.email });
+    if (fetchedUser) {
+      fetchedUser = JSON.parse(JSON.stringify(fetchedUser));
+    }
     if (!user) {
       // first-time login, create a new user associated with the email address
-      await User.create({ email: session.user.email });
+      await User.create({ email: user.email });
     }
   } catch (err) {
     console.log(err);
@@ -127,7 +113,7 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
-      user: session.user,
+      user: fetchedUser,
     },
   };
 }
