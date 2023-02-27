@@ -22,17 +22,21 @@ export default function EditorPage(props) {
 }
 
 export async function getServerSideProps(context) {
-  const session = await getServerSession(context.req, context.res, authOptions);
+  let { user } = await getServerSession(context.req, context.res, authOptions);
 
-  if (!session) return { redirect: { destination: '/' } };
+  if (!user) return { redirect: { destination: '/' } };
 
-  let user = {};
+  let fetchedUser = {};
   try {
     await dbConnect();
-    user = await models.User.findOne({ email: session.user.email });
+    fetchedUser = await User.findOne({ email: user.email });
+    if (fetchedUser) {
+      fetchedUser = JSON.parse(JSON.stringify(fetchedUser));
+    }
     if (!user) {
       // first-time login, create a new user associated with the email address
-      user = await User.create({ email: session.user.email });
+      const newUser = await User.create({ email: user.email });
+      fetchedUser = JSON.parse(JSON.stringify(newUser));
     }
   } catch (err) {
     console.log(err);
@@ -40,7 +44,7 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
-      user: session.user,
+      user: fetchedUser,
     },
   };
 }
