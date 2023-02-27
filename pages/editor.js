@@ -32,7 +32,7 @@ export async function getServerSideProps(context) {
     user = await models.User.findOne({ email: session.user.email });
     if (!user) {
       // first-time login, create a new user associated with the email address
-      await User.create({ email: session.user.email });
+      user = await User.create({ email: session.user.email });
     }
   } catch (err) {
     console.log(err);

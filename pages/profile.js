@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import { signOut } from 'next-auth/react';
 import { authOptions } from './api/auth/[...nextauth]';
 import { getServerSession } from 'next-auth/next';
@@ -11,7 +10,6 @@ import { useState } from 'react';
 
 export default function ProfilePage({ user }) {
   const [updated, setUpdated] = useState(false);
-  const router = useRouter();
 
   // formik logic
   const formik = useFormik({
@@ -105,7 +103,7 @@ export async function getServerSideProps(context) {
     }
     if (!user) {
       // first-time login, create a new user associated with the email address
-      await User.create({ email: user.email });
+      fetchedUser = await User.create({ email: user.email });
     }
   } catch (err) {
     console.log(err);
