@@ -35,7 +35,11 @@ export async function getServerSideProps(context) {
     }
     if (!user) {
       // first-time login, create a new user associated with the email address
-      const newUser = await User.create({ email: user.email });
+      const newUser = await User.create({
+        email: user.email,
+        username: user.email,
+        description: '',
+      });
       fetchedUser = JSON.parse(JSON.stringify(newUser));
     }
   } catch (err) {
