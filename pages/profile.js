@@ -29,10 +29,14 @@ export default function ProfilePage({ user }) {
       ),
     }),
 
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       console.log(values);
       setUpdated(true);
-      // update user's document via update to /user/update
+      await fetch('/api/user/update', {
+        method: 'POST',
+        body: JSON.stringify(formik.values),
+        headers: { 'Content-Type': 'application/json' },
+      });
     },
   });
 
@@ -114,11 +118,6 @@ export async function getServerSideProps(context) {
   } catch (err) {
     console.log(err);
   }
-  fetchedUser = {
-    username: 'hi',
-    description: 'hi',
-    showProfilePicture: true,
-  };
 
   return {
     props: {
