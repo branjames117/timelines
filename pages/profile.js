@@ -94,34 +94,36 @@ export default function ProfilePage({ user }) {
 }
 
 export async function getServerSideProps(context) {
-  let { user } = await getServerSession(context.req, context.res, authOptions);
+  const session = await getServerSession(context.req, context.res, authOptions);
 
-  if (!user) return { redirect: { destination: '/' } };
+  if (!session) return { redirect: { destination: '/' } };
 
-  let fetchedUser = {};
+  let user = session.user;
+
   try {
-    console.log('connecting to db');
     await dbConnect();
-    fetchedUser = await User.findOne({ email: user.email });
-    console.log(fetchedUser);
-    if (fetchedUser) {
-      fetchedUser = JSON.parse(JSON.stringify(fetchedUser));
-    } else {
-      // first-time login, create a new user associated with the email address
-      const newUser = await User.create({
+    let fetchedUser = await User.findOne({ email: user.email }).select(
+      '-_id -__v'
+    );
+    if (!fetchedUser) {
+      fetchedUser = await User.create({
         email: user.email,
         username: user.email,
         description: '',
       });
-      fetchedUser = JSON.parse(JSON.stringify(newUser));
+      if (!fetchedUser) {
+        return { redirect: { destination: '/' } };
+      }
     }
+    user = { ...JSON.parse(JSON.stringify(fetchedUser)), ...user };
   } catch (err) {
     console.log(err);
+    return { redirect: { destination: '/' } };
   }
 
   return {
     props: {
-      user: fetchedUser,
+      user,
     },
   };
 }

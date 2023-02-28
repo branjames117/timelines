@@ -1,10 +1,8 @@
 import Head from 'next/head';
 import { authOptions } from './api/auth/[...nextauth]';
 import { getServerSession } from 'next-auth/next';
-import { dbConnect } from '../lib/dbConnect';
-import { User } from '../models';
 
-export default function EditorPage(props) {
+export default function EditorPage() {
   return (
     <>
       <Head>
@@ -21,39 +19,11 @@ export default function EditorPage(props) {
 }
 
 export async function getServerSideProps(context) {
-  let { user } = await getServerSession(context.req, context.res, authOptions);
+  const session = await getServerSession(context.req, context.res, authOptions);
 
-  if (!user) return { redirect: { destination: '/' } };
-
-  let fetchedUser = {};
-  try {
-    console.log('connecting to db');
-    await dbConnect();
-    fetchedUser = await User.findOne({ email: user.email });
-    console.log(fetchedUser);
-    if (fetchedUser) {
-      fetchedUser = JSON.parse(JSON.stringify(fetchedUser));
-    } else {
-      // first-time login, create a new user associated with the email address
-      const newUser = await User.create({
-        email: user.email,
-        username: user.email,
-        description: '',
-      });
-      fetchedUser = JSON.parse(JSON.stringify(newUser));
-    }
-  } catch (err) {
-    console.log(err);
-  }
-  fetchedUser = {
-    username: 'hi',
-    description: 'hi',
-    showProfilePicture: true,
-  };
+  if (!session) return { redirect: { destination: '/' } };
 
   return {
-    props: {
-      user: fetchedUser,
-    },
+    props: {},
   };
 }
