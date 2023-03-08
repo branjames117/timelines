@@ -7,6 +7,7 @@ import * as Yup from 'yup';
 import { dbConnect } from '../lib/dbConnect';
 import { User } from '../models';
 import { useState } from 'react';
+import createTestData from '../lib/testData';
 
 export default function ProfilePage({ user }) {
   const [updated, setUpdated] = useState(false);
@@ -102,6 +103,7 @@ export async function getServerSideProps(context) {
 
   try {
     await dbConnect();
+    await createTestData();
     let fetchedUser = await User.findOne({ email: user.email }).select(
       '-_id -__v'
     );

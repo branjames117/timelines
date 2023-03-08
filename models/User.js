@@ -1,6 +1,6 @@
 import { Schema, models, model } from 'mongoose';
 
-const userSchema = new Schema({
+export const userSchema = new Schema({
   username: String,
   email: String,
   description: String,
@@ -9,4 +9,4 @@ const userSchema = new Schema({
   showProfilePicture: Boolean,
 });
 
-export default models.User || model('User', userSchema);
+export const User = models.User || model('User', userSchema);

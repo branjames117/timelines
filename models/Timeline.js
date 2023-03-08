@@ -3,23 +3,24 @@ import characterSchema from './Character';
 import dateFormatSchema from './DateFormat';
 import eventSchema from './Event';
 import locationSchema from './Location';
+import { userSchema } from './User';
 
 const timelineSchema = new Schema({
   name: {
     type: String,
-    required: true,
+    required: [true, 'Name is required.'],
   },
   map: String,
   universe: {
     type: String,
-    required: true,
+    required: [true, 'Universe is required.'],
   },
   dateFormat: dateFormatSchema,
   characters: [characterSchema],
   locations: [locationSchema],
   events: [eventSchema],
   metadata: {
-    author: Schema.Types.ObjectId,
+    author: userSchema,
     created: {
       type: Date,
       default: Date.now,

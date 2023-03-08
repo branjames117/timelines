@@ -2,61 +2,34 @@ import { Schema } from 'mongoose';
 
 const dateFormatSchema = new Schema({
   era: {
-    pre: {
+    preLabel: {
       type: String,
       default: 'B.C.E.',
     },
-    post: {
+    postLabel: {
       type: String,
       default: 'C.E.',
     },
   },
   year: {
-    name: {
+    label: {
       type: String,
       default: 'Year',
     },
   },
   month: {
-    name: {
+    label: {
       type: String,
       default: 'Month',
     },
-    months: {
-      type: [String],
-      default: [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December',
-      ],
-    },
+    months: [String],
   },
   day: {
-    name: {
+    label: {
       type: String,
       default: 'Day',
     },
-    days: {
-      type: [String],
-      default: [
-        'Sunday',
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday',
-      ],
-    },
+    days: [String],
   },
 });
 

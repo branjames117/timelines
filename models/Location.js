@@ -3,16 +3,16 @@ import { Schema } from 'mongoose';
 const locationSchema = new Schema({
   name: {
     type: String,
-    required: true,
+    required: [true, 'Name is required.'],
   },
   description: String,
   x: {
     type: Number,
-    required: true,
+    required: [true, 'X is required.'],
   },
   y: {
     type: Number,
-    required: true,
+    required: [true, 'Y is required.'],
   },
 });
 
