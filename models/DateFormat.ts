@@ -1,6 +1,24 @@
 import { Schema } from 'mongoose';
 
-const dateFormatSchema = new Schema({
+export interface IDateFormat {
+  era?: {
+    preLabel?: string;
+    postLabel?: string;
+  };
+  year?: {
+    label?: string;
+  };
+  month?: {
+    label?: string;
+    months?: string[];
+  };
+  day?: {
+    label?: string;
+    days?: string[];
+  };
+}
+
+export const dateFormatSchema = new Schema<IDateFormat>({
   era: {
     preLabel: {
       type: String,
@@ -32,5 +50,3 @@ const dateFormatSchema = new Schema({
     days: [String],
   },
 });
-
-export default dateFormatSchema;

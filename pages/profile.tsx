@@ -1,3 +1,4 @@
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { signOut } from 'next-auth/react';
 import { authOptions } from './api/auth/[...nextauth]';
@@ -13,33 +14,38 @@ export default function ProfilePage({ user }) {
   const [updated, setUpdated] = useState(false);
 
   // formik logic
-  const formik = useFormik({
-    initialValues: {
-      username: user.username || '',
-      description: user.description || '',
-      showProfilePicture: user.showProfilePicture || false,
-    },
+  const { touched, values, handleChange, handleBlur, handleSubmit, errors } =
+    useFormik<{
+      username: string;
+      description: string;
+      showProfilePicture: boolean;
+    }>({
+      initialValues: {
+        username: user.username || '',
+        description: user.description || '',
+        showProfilePicture: user.showProfilePicture || false,
+      },
 
-    validationSchema: Yup.object({
-      username: Yup.string()
-        .max(20, 'Username must be no longer than 20 characters.')
-        .required('Username is required.'),
-      description: Yup.string().max(
-        255,
-        'Description must be no longer than 255 characters.'
-      ),
-    }),
+      validationSchema: Yup.object({
+        username: Yup.string()
+          .max(20, 'Username must be no longer than 20 characters.')
+          .required('Username is required.'),
+        description: Yup.string().max(
+          255,
+          'Description must be no longer than 255 characters.'
+        ),
+      }),
 
-    onSubmit: async (values) => {
-      console.log(values);
-      setUpdated(true);
-      await fetch('/api/user/update', {
-        method: 'POST',
-        body: JSON.stringify(formik.values),
-        headers: { 'Content-Type': 'application/json' },
-      });
-    },
-  });
+      onSubmit: async (values) => {
+        console.log(values);
+        setUpdated(true);
+        await fetch('/api/user/update', {
+          method: 'POST',
+          body: JSON.stringify(values),
+          headers: { 'Content-Type': 'application/json' },
+        });
+      },
+    });
 
   function signoutHandler() {
     signOut({ callbackUrl: '/' });
@@ -51,38 +57,37 @@ export default function ProfilePage({ user }) {
         <title>Timelines / My Profile</title>
       </Head>
       {updated && <div>Profile updated successfully.</div>}
-      <form onSubmit={formik.handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor='username'>Name</label>
           <input
             placeholder='Enter a unique public username'
             type='text'
             name='username'
-            value={formik.values.username}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
+            value={values.username}
+            onChange={handleChange}
+            onBlur={handleBlur}
           />
-          <span>{formik.touched.username && formik.errors.username}</span>
+          <span>{touched.username && errors.username}</span>
         </div>{' '}
         <div>
           <label htmlFor='description'>Description</label>
           <textarea
             placeholder='Tell us about yourself'
-            type='text'
             name='description'
-            value={formik.values.description}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
+            value={values.description}
+            onChange={handleChange}
+            onBlur={handleBlur}
           />
-          <span>{formik.touched.description && formik.errors.description}</span>
+          <span>{touched.description && errors.description}</span>
         </div>{' '}
         <div>
           <label htmlFor='showProfilePicture'>Show Profile Picture?</label>
           <input
             type='checkbox'
             name='showProfilePicture'
-            checked={formik.values.showProfilePicture}
-            onChange={formik.handleChange}
+            checked={values.showProfilePicture}
+            onChange={handleChange}
           />
         </div>
         <div>
@@ -94,10 +99,18 @@ export default function ProfilePage({ user }) {
   );
 }
 
-export async function getServerSideProps(context) {
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
   const session = await getServerSession(context.req, context.res, authOptions);
 
-  if (!session) return { redirect: { destination: '/' } };
+  if (!session)
+    return {
+      props: null,
+      redirect: {
+        destination: '/',
+      },
+    };
 
   let user = session.user;
 
@@ -114,13 +127,21 @@ export async function getServerSideProps(context) {
         description: '',
       });
       if (!fetchedUser) {
-        return { redirect: { destination: '/' } };
+        return {
+          props: null,
+          redirect: {
+            destination: '/',
+          },
+        };
       }
     }
     user = { ...JSON.parse(JSON.stringify(fetchedUser)), ...user };
   } catch (err) {
     console.log(err);
-    return { redirect: { destination: '/' } };
+    return {
+      props: null,
+      redirect: { destination: '/' },
+    };
   }
 
   return {
@@ -128,4 +149,4 @@ export async function getServerSideProps(context) {
       user,
     },
   };
-}
+};

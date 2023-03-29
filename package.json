@@ -21,6 +21,8 @@
     "yup": "^1.0.1"
   },
   "devDependencies": {
-    "sass": "^1.58.3"
+    "@types/react": "18.0.31",
+    "sass": "^1.58.3",
+    "typescript": "5.0.2"
   }
 }

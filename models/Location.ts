@@ -1,6 +1,13 @@
 import { Schema } from 'mongoose';
 
-const locationSchema = new Schema({
+export interface ILocation {
+  name: string;
+  description?: string;
+  x: number;
+  y: number;
+}
+
+export const locationSchema = new Schema<ILocation>({
   name: {
     type: String,
     required: [true, 'Name is required.'],
@@ -15,5 +22,3 @@ const locationSchema = new Schema({
     required: [true, 'Y is required.'],
   },
 });
-
-export default locationSchema;

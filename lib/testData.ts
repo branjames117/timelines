@@ -1,7 +1,15 @@
 import { dbConnect } from './dbConnect';
-import { Timeline } from '../models';
+import {
+  ICharacter,
+  IDateFormat,
+  IEvent,
+  ILocation,
+  ITimeline,
+  IUser,
+  Timeline,
+} from '../models';
 
-const characters = [
+const characters: ICharacter[] = [
   {
     name: 'Frodo Baggins',
     description:
@@ -34,7 +42,7 @@ const characters = [
   },
 ];
 
-const locations = [
+const locations: ILocation[] = [
   {
     name: 'The Shire',
     description:
@@ -57,11 +65,11 @@ const locations = [
   },
 ];
 
-const user = {
+const user: IUser = {
   email: 'branjames117@gmail.com',
 };
 
-const dateFormat = {
+const dateFormat: IDateFormat = {
   era: {
     preLabel: 'The Second Age',
     postLabel: 'The Third Age',
@@ -100,7 +108,7 @@ const dateFormat = {
   },
 };
 
-const events = [
+const events: IEvent[] = [
   {
     date: {
       year: 2980,
@@ -110,7 +118,7 @@ const events = [
   },
 ];
 
-const timeline = {
+const timeline: ITimeline = {
   name: 'The Lord of the Rings',
   map: 'https://wallpapercave.com/wp/bK8zri5.jpg',
   universe: 'The Lord of the Rings',

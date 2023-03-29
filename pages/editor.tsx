@@ -1,3 +1,4 @@
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { authOptions } from './api/auth/[...nextauth]';
 import { getServerSession } from 'next-auth/next';
@@ -18,12 +19,22 @@ export default function EditorPage() {
   );
 }
 
-export async function getServerSideProps(context) {
-  const session = await getServerSession(context.req, context.res, authOptions);
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const { res, req } = context;
+  const session = await getServerSession(req, res, authOptions);
 
-  if (!session) return { redirect: { destination: '/' } };
+  if (!session) {
+    return {
+      props: null,
+      redirect: {
+        destination: '/',
+      },
+    };
+  }
 
   return {
-    props: {},
+    props: null,
   };
-}
+};

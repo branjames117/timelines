@@ -1,6 +1,12 @@
 import { Schema } from 'mongoose';
 
-const dateSchema = new Schema({
+export interface IDate {
+  year?: number;
+  month?: number;
+  day?: number;
+}
+
+export const dateSchema = new Schema({
   year: Number,
   month: {
     type: Number,
@@ -11,5 +17,3 @@ const dateSchema = new Schema({
     min: [0, 'Day cannot be negative.'],
   },
 });
-
-export default dateSchema;
