@@ -128,7 +128,7 @@ export const getServerSideProps: GetServerSideProps = async (
       });
       if (!fetchedUser) {
         return {
-          props: null,
+          props: {},
           redirect: {
             destination: '/',
           },
@@ -139,7 +139,7 @@ export const getServerSideProps: GetServerSideProps = async (
   } catch (err) {
     console.log(err);
     return {
-      props: null,
+      props: {},
       redirect: { destination: '/' },
     };
   }

@@ -1,12 +1,26 @@
-export default function IndexPage() {
-  return (
-    <div>
-      WIP - Timelines Page
-      <br />
-      User must sign in to access the My Timelines and Editor view, but can
-      otherwise access this Timelines view only. Here, the user is presented
-      with a list of published Timelines, and can choose which Timeline to load
-      into the Viewer.
-    </div>
-  );
+import { GetServerSideProps } from 'next';
+import TimelineList from '../components/timeline/TimelineList';
+import { dbConnect } from '../lib/dbConnect';
+import { Timeline } from '../models';
+
+export default function IndexPage({ timelines }) {
+  return <TimelineList timelines={timelines} />;
 }
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  let fetchedTimelines = [];
+  try {
+    await dbConnect();
+    fetchedTimelines = await Timeline.find().select('-__v').lean();
+
+    fetchedTimelines = JSON.parse(JSON.stringify(fetchedTimelines));
+  } catch (err) {
+    console.log(err);
+  } finally {
+    return {
+      props: {
+        timelines: fetchedTimelines,
+      },
+    };
+  }
+};

@@ -27,7 +27,7 @@ export const getServerSideProps: GetServerSideProps = async (
 
   if (!session) {
     return {
-      props: null,
+      props: {},
       redirect: {
         destination: '/',
       },
@@ -35,6 +35,6 @@ export const getServerSideProps: GetServerSideProps = async (
   }
 
   return {
-    props: null,
+    props: {},
   };
 };
