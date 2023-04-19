@@ -65,10 +65,6 @@ const locations: ILocation[] = [
   },
 ];
 
-const user: IUser = {
-  email: 'branjames117@gmail.com',
-};
-
 const dateFormat: IDateFormat = {
   era: {
     preLabel: 'The Second Age',
@@ -126,13 +122,12 @@ const timeline: ITimeline = {
   locations,
   events,
   dateFormat,
-  metadata: {
-    author: user,
-  },
+  author: null,
 };
 
-export default async function createTestData() {
+export default async function createTestData(user: IUser) {
   await dbConnect();
+  timeline.author = user;
   try {
     await Timeline.create(timeline);
   } catch (err) {

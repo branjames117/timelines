@@ -1,7 +1,7 @@
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
 import { dbConnect } from '../../../lib/dbConnect';
-import { User } from '../../../models';
+import { Timeline, User } from '../../../models';
 
 /**
  * @param {import('next').NextApiRequest} req
@@ -18,6 +18,12 @@ export default async (req, res) => {
     const user = await User.findOneAndUpdate(
       { email: session.user.email },
       req.body
+    );
+
+    // update username in their existing timelines
+    const timelines = await Timeline.updateMany(
+      { 'author.email': user.email },
+      { 'author.username': user.username }
     );
 
     res.status(200).json({ user });

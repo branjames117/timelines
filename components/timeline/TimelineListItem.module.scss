@@ -1,5 +1,13 @@
-.map {
-  position: relative;
-  width: 250px;
-  height: 250px;
+.listItem {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 35px;
+  margin-bottom: 35px;
+  width: 100%;
+
+  .mapPane {
+    border-radius: 10px;
+    height: 250px;
+    width: 250px;
+  }
 }

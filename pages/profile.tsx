@@ -116,10 +116,7 @@ export const getServerSideProps: GetServerSideProps = async (
 
   try {
     await dbConnect();
-    await createTestData();
-    let fetchedUser = await User.findOne({ email: user.email }).select(
-      '-_id -__v'
-    );
+    let fetchedUser = await User.findOne({ email: user.email }).select('-__v');
     if (!fetchedUser) {
       fetchedUser = await User.create({
         email: user.email,
@@ -136,6 +133,7 @@ export const getServerSideProps: GetServerSideProps = async (
       }
     }
     user = { ...JSON.parse(JSON.stringify(fetchedUser)), ...user };
+    await createTestData(fetchedUser);
   } catch (err) {
     console.log(err);
     return {

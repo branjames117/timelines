@@ -11,9 +11,13 @@ export const getServerSideProps: GetServerSideProps = async () => {
   let fetchedTimelines = [];
   try {
     await dbConnect();
-    fetchedTimelines = await Timeline.find().select('-__v').lean();
+    fetchedTimelines = await Timeline.find()
+      .select('-__v')
+      //.populate('author')
+      .lean();
 
     fetchedTimelines = JSON.parse(JSON.stringify(fetchedTimelines));
+    console.log(fetchedTimelines[0].author);
   } catch (err) {
     console.log(err);
   } finally {

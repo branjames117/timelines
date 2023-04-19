@@ -1,9 +1,9 @@
-import { Schema, models, model, Model } from 'mongoose';
+import { Schema, models, model, Model, Types } from 'mongoose';
 import { ICharacter, characterSchema } from './Character';
 import { IDateFormat, dateFormatSchema } from './DateFormat';
 import { IEvent, eventSchema } from './Event';
 import { ILocation, locationSchema } from './Location';
-import { IUser, userSchema } from './User';
+import { IUser } from './User';
 
 export interface ITimeline {
   name: string;
@@ -13,8 +13,8 @@ export interface ITimeline {
   characters?: ICharacter[];
   locations?: ILocation[];
   events?: IEvent[];
-  metadata: {
-    author: IUser;
+  author: IUser;
+  metadata?: {
     created?: string;
     updated?: string;
   };
@@ -34,8 +34,12 @@ const timelineSchema = new Schema<ITimeline>({
   characters: [characterSchema],
   locations: [locationSchema],
   events: [eventSchema],
+  author: {
+    type: Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
   metadata: {
-    author: userSchema,
     created: {
       type: Date,
       default: Date.now,
