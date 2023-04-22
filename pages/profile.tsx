@@ -28,7 +28,7 @@ export default function ProfilePage({ user }) {
 
       validationSchema: Yup.object({
         username: Yup.string()
-          .max(20, 'Username must be no longer than 20 characters.')
+          .max(50, 'Username must be no longer than 50 characters.')
           .required('Username is required.'),
         description: Yup.string().max(
           255,
@@ -37,13 +37,14 @@ export default function ProfilePage({ user }) {
       }),
 
       onSubmit: async (values) => {
-        console.log(values);
-        setUpdated(true);
-        await fetch('/api/user/update', {
+        const response = await fetch('/api/user/update', {
           method: 'POST',
           body: JSON.stringify(values),
           headers: { 'Content-Type': 'application/json' },
         });
+        if (response.ok) {
+          setUpdated(true);
+        }
       },
     });
 
@@ -59,7 +60,7 @@ export default function ProfilePage({ user }) {
       {updated && <div>Profile updated successfully.</div>}
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor='username'>Name</label>
+          <label htmlFor='username'>Username </label>
           <input
             placeholder='Enter a unique public username'
             type='text'
@@ -71,7 +72,7 @@ export default function ProfilePage({ user }) {
           <span>{touched.username && errors.username}</span>
         </div>{' '}
         <div>
-          <label htmlFor='description'>Description</label>
+          <label htmlFor='description'>Description </label>
           <textarea
             placeholder='Tell us about yourself'
             name='description'
@@ -82,7 +83,7 @@ export default function ProfilePage({ user }) {
           <span>{touched.description && errors.description}</span>
         </div>{' '}
         <div>
-          <label htmlFor='showProfilePicture'>Show Profile Picture?</label>
+          <label htmlFor='showProfilePicture'>Show Profile Picture? </label>
           <input
             type='checkbox'
             name='showProfilePicture'
@@ -90,6 +91,8 @@ export default function ProfilePage({ user }) {
             onChange={handleChange}
           />
         </div>
+        <div>Joined: {user.joined}</div>
+        <div>Last Login: {user.lastLogin}</div>
         <div>
           <button type='submit'>Save Changes</button>
         </div>
@@ -117,17 +120,17 @@ export const getServerSideProps: GetServerSideProps = async (
   try {
     await dbConnect();
     let fetchedUser = await User.findOne({ email: user.email }).select('-__v');
+    // if user has no record, create record
     if (!fetchedUser) {
       fetchedUser = await User.create({
         email: user.email,
         username: user.email,
-        description: '',
       });
       if (!fetchedUser) {
         return {
-          props: {},
+          props: null,
           redirect: {
-            destination: '/',
+            destination: '/404',
           },
         };
       }
@@ -135,10 +138,9 @@ export const getServerSideProps: GetServerSideProps = async (
     user = { ...JSON.parse(JSON.stringify(fetchedUser)), ...user };
     await createTestData(fetchedUser);
   } catch (err) {
-    console.log(err);
     return {
-      props: {},
-      redirect: { destination: '/' },
+      props: null,
+      redirect: { destination: '/404' },
     };
   }
 

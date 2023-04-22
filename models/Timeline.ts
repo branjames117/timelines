@@ -2,21 +2,21 @@ import { Schema, models, model, Model, Types } from 'mongoose';
 import { ICharacter, characterSchema } from './Character';
 import { IDateFormat, dateFormatSchema } from './DateFormat';
 import { IEvent, eventSchema } from './Event';
+import { IUser, userSchema } from './User';
 import { ILocation, locationSchema } from './Location';
-import { IUser } from './User';
 
 export interface ITimeline {
-  name: string;
+  name?: string;
   map?: string;
-  universe: string;
+  universe?: string;
   dateFormat?: IDateFormat;
   characters?: ICharacter[];
   locations?: ILocation[];
   events?: IEvent[];
-  author: IUser;
+  author?: IUser;
   metadata?: {
     created?: string;
-    updated?: string;
+    modified?: string;
   };
 }
 
@@ -31,9 +31,18 @@ const timelineSchema = new Schema<ITimeline>({
     required: [true, 'Universe is required.'],
   },
   dateFormat: dateFormatSchema,
-  characters: [characterSchema],
-  locations: [locationSchema],
-  events: [eventSchema],
+  characters: {
+    type: [characterSchema],
+    default: [],
+  },
+  locations: {
+    type: [locationSchema],
+    default: [],
+  },
+  events: {
+    type: [eventSchema],
+    default: [],
+  },
   author: {
     type: Types.ObjectId,
     ref: 'User',
@@ -44,15 +53,11 @@ const timelineSchema = new Schema<ITimeline>({
       type: Date,
       default: Date.now,
     },
-    updated: {
+    modified: {
       type: Date,
       default: Date.now,
     },
   },
-});
-
-timelineSchema.virtual('locationCount').get(function () {
-  return this.locations.length || 0;
 });
 
 export const Timeline: Model<ITimeline> =

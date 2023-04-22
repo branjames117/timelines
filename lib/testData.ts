@@ -122,14 +122,19 @@ const timeline: ITimeline = {
   locations,
   events,
   dateFormat,
-  author: null,
 };
 
 export default async function createTestData(user: IUser) {
   await dbConnect();
-  timeline.author = user;
   try {
+    let timelines = await Timeline.find().lean();
+    if (timelines.length) {
+      throw Error;
+    }
+    timeline.author = user;
     await Timeline.create(timeline);
+    // timeline.name = 'The Hobbit';
+    // await Timeline.create(timeline);
   } catch (err) {
     console.log('Skipping test data creation.');
   }

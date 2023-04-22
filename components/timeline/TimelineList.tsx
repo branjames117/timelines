@@ -3,9 +3,16 @@ import TimelineListItem from './TimelineListItem';
 export default function TimelineList({ timelines }) {
   return (
     <ul>
-      {timelines.map((timeline, index) => (
-        <TimelineListItem timeline={timeline} key={index}></TimelineListItem>
-      ))}
+      {timelines.length ? (
+        timelines.map((timeline, index) => (
+          <TimelineListItem
+            timeline={timeline}
+            key={timeline._id}
+          ></TimelineListItem>
+        ))
+      ) : (
+        <div>No timelines found.</div>
+      )}
     </ul>
   );
 }
